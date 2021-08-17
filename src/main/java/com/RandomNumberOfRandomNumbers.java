@@ -22,51 +22,55 @@ import java.util.concurrent.locks.ReentrantLock;
  * всех инфраструктурных подсистем, таких как логирование и чтение параметров из файлов конфигурации
  * Решение задачи необходимо отправить ссылкой на опубликованный проект на github.com
  */
-public class ThreadSafeWithSynchronization {
+
+public class RandomNumberOfRandomNumbers {
 
     private final ReentrantLock lock = new ReentrantLock();
     private final List<AtomicInteger> randomNumbers = new ArrayList<>();
+    private final Random random = new Random();
+
     private int count = 0;
 
     public void startThreadProcess() {
-        PRODUCER.start();
-        CONSUMER.start();
+        producer.start();
+        consumer.start();
     }
 
-    private final Thread PRODUCER = new Thread(() -> {
+    private final Thread producer = new Thread(() -> {
 
         lock.lock();
         count++;
 
         if (count == 1) {
-            for (int i = 0; i < new Random().nextInt(100); i++) {
+            for (int i = 0; i < random.nextInt(100); i++) {
 
                 AtomicInteger number = new AtomicInteger();
 
-                number.set(new Random().nextInt(100));
+                number.set(random.nextInt(100));
                 randomNumbers.add(number);
             }
-            System.out.println("Numbers written");
+            System.out.println("Numbers written \n");
+
         } else {
             count--;
         }
-
 
         lock.unlock();
     });
 
 
-    // Поток для чтения данных. Читает данные из списка Randoms и выводит их в консоль
-    private final Thread CONSUMER = new Thread(() -> {
+    // Поток для чтения данных. Читает данные из списка randomNumbers и выводит их в консоль
+    private final Thread consumer = new Thread(() -> {
 
         lock.lock();
         count++;
 
         if (count == 2) {
-            System.out.println("Reading numbers");
+            System.out.println("Reading numbers \n");
 
             randomNumbers.forEach(System.out::println);
             randomNumbers.clear();
+
         } else {
             count--;
         }

@@ -5,8 +5,8 @@ public class Runner {
 
     public static void main(String[] args) {
 
-        ThreadSafeWithSynchronization threadSafeWithSynchronization = new ThreadSafeWithSynchronization();
-        threadSafeWithSynchronization.startThreadProcess();
+        RandomNumberOfRandomNumbers randomNumbers = new RandomNumberOfRandomNumbers();
+        randomNumbers.startThreadProcess();
 
     }
 }
